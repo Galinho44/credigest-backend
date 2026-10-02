@@ -142,6 +142,11 @@ Guardados aqui porque o padrão se repete, e o padrão é sempre o mesmo:
   verdade — nenhum teste importava esse arquivo.
 - O health check vivia fora do roteador e respondia 200 em POST, enquanto
   toda rota devolve 405. Só apareceu testando método por método.
+- **`JA_ESTAVA_PAGA` retornava `duplicado: false`** quando chegava evento
+  novo para pagamento já processado. O front usava `duplicado` pra avisar
+  "já estava baixa" e não mostrava a mensagem. Corrigido em
+  `src/servicos/baixaPix.js:140` para retornar `duplicado: true` quando
+  `acao === 'JA_ESTAVA_PAGA'`.
 
 ## Pendente
 
