@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Credigest">
+  <title>Credigest</title>
+  <rect width="64" height="64" rx="14" fill="#0f172a"/>
+
+  <!-- a boca do "C": traço aberto à direita, como a letra -->
+  <path d="M42 20.5A17 17 0 1 0 42 43.5"
+        fill="none" stroke="#38bdf8" stroke-width="7"
+        stroke-linecap="round"/>
+
+  <!-- o "R" do Pix, cutucando o C: mesma geometria, outra leitura -->
+  <path d="M34 14v16M34 14h7.5a7 7 0 0 1 0 14H34M34 30l9 20"
+        fill="none" stroke="#22c55e" stroke-width="5.5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,24 @@
+# Segredos e dados locais NUNCA entram no git
+.env
+.env.local
+.env.*.local
+
+# Banco de dados local (contem dado de cliente)
+dados/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Dependencias (o projeto nao usa, mas por seguranca)
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Sistema operacional / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

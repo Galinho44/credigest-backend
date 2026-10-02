@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Credigest — cobrança Pix</title>
+<link rel="icon" href="icone.svg" type="image/svg+xml">
+<link rel="stylesheet" href="estilo.css?v=1">
+</head>
+<body>
+
+<header class="topo">
+  <div class="topo__marca">
+    <!-- Ícone próprio: PDV genérico + R$, não o logo do WhatsApp -->
+    <svg class="topo__logo" viewBox="0 0 32 32" aria-hidden="true">
+      <rect x="3" y="9" width="26" height="18" rx="3" fill="#0f9d58"/>
+      <rect x="6" y="12" width="8" height="6" rx="1.5" fill="#fff"/>
+      <path d="M18 15h8M18 19h5" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <div>
+      <h1>Credigest</h1>
+      <p class="topo__sub" id="gateway-rotulo">carregando…</p>
+    </div>
+  </div>
+</header>
+
+<main class="conteudo">
+
+  <!-- ================= RESUMO ================= -->
+  <section aria-labelledby="t-resumo">
+    <h2 id="t-resumo" class="secao__titulo">Resumo</h2>
+    <div class="cartoes" id="cartoes-resumo">
+      <div class="cartao"><span class="cartao__rot">A receber</span><b class="cartao__valor" id="r-receber">—</b></div>
+      <div class="cartao cartao--verde"><span class="cartao__rot">Recebido</span><b class="cartao__valor" id="r-recebido">—</b></div>
+      <div class="cartao cartao--vermelho"><span class="cartao__rot">Em atraso</span><b class="cartao__valor" id="r-atraso">—</b></div>
+      <div class="cartao"><span class="cartao__rot">Pendentes</span><b class="cartao__valor" id="r-pendentes">—</b></div>
+    </div>
+  </section>
+
+  <!-- ================= NOVO CLIENTE ================= -->
+  <section aria-labelledby="t-cliente">
+    <h2 id="t-cliente" class="secao__titulo">Cadastrar cliente</h2>
+    <form class="form form--linha" id="form-cliente">
+      <label>Nome
+        <input name="nome" required minlength="2" placeholder="Maria Aparecida Souza" autocomplete="name">
+      </label>
+      <label class="curto">DDD
+        <input name="ddd" required inputmode="numeric" pattern="[0-9]{2}" maxlength="2" placeholder="11" autocomplete="tel-national">
+      </label>
+      <label class="curto">Telefone
+        <input name="telefone" required inputmode="numeric" maxlength="11" placeholder="987654321">
+      </label>
+      <label>E-mail
+        <input name="email" type="email" placeholder="opcional">
+      </label>
+      <button class="btn btn--primario" type="submit">Cadastrar</button>
+    </form>
+  </section>
+
+  <!-- ================= NOVA DÍVIDA ================= -->
+  <section aria-labelledby="t-divida">
+    <h2 id="t-divida" class="secao__titulo">Nova dívida</h2>
+    <form class="form form--linha" id="form-divida">
+      <label>Cliente
+        <select name="cliente_id" id="select-cliente" required>
+          <option value="">selecione…</option>
+        </select>
+      </label>
+      <label>Descrição
+        <input name="descricao" required minlength="3" maxlength="200" placeholder="Parcela 5/12">
+      </label>
+      <label class="curto">Valor (R$)
+        <input name="valor" required inputmode="decimal" placeholder="850.00">
+      </label>
+      <label class="curto">Vencimento
+        <input name="vencimento" type="date">
+      </label>
+      <button class="btn btn--primario" type="submit">Criar dívida</button>
+    </form>
+  </section>
+
+  <!-- ================= LISTA ================= -->
+  <section aria-labelledby="t-lista">
+    <div class="secao__cabecalho">
+      <h2 id="t-lista" class="secao__titulo">Dívidas</h2>
+      <div class="filtros" role="group" aria-label="Filtrar por status">
+        <button class="ficha ficha--ativa" data-filtro="">todas</button>
+        <button class="ficha" data-filtro="PENDENTE">pendentes</button>
+        <button class="ficha" data-filtro="PAGO">pagas</button>
+      </div>
+    </div>
+
+    <div id="area-lista">
+      <p class="vazio" id="lista-vazia" hidden>Nenhuma dívida por aqui.</p>
+      <div id="lista"></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ================= MODAL DO PIX ================= -->
+<dialog id="modal-pix" class="modal">
+  <div class="modal__topo">
+    <h3 id="modal-titulo">Cobrança Pix</h3>
+    <button class="modal__fechar" id="modal-fechar" aria-label="Fechar">×</button>
+  </div>
+
+  <div class="modal__corpo" id="modal-corpo"></div>
+</dialog>
+
+<!-- ================= AVISO ================= -->
+<div id="aviso" class="aviso" role="status" aria-live="polite" hidden></div>
+
+<script type="module" src="app.js?v=1"></script>
+</body>
+</html>
