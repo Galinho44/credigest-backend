@@ -4,6 +4,12 @@
  * JSON porque da para filtrar por campo depois (grep, Loki, arquivo).
  * Nao usa biblioteca: um logger de 30 linhas e' melhor que uma
  * dependencia de 30.000 linhas para o que o projeto precisa.
+ *
+ * `level` e `msg` sao os campos que plataformas de log esperam (Railway,
+ * Grafana Loki, Datadog, CloudWatch). Sem eles o painel mostra
+ * "[inf]" com a mensagem VAZIA, porque nao reconhece "nivel" e
+ * "mensagem" em portugues. Os dois idiomas sao emitidos: um para a
+ * plataforma, outro para quem le o arquivo.
  */
 
 const NIVEIS = { debug: 10, info: 20, warn: 30, error: 40, silencioso: 99 };
@@ -15,6 +21,10 @@ function escrever(nivel, mensagem, extra = {}) {
 
   const registro = {
     em: new Date().toISOString(),
+    // campos que a plataforma reconhece
+    level: nivel,
+    msg: mensagem,
+    // campos em portugues, para quem le o arquivo
     nivel,
     mensagem,
     ...extra,

@@ -21,10 +21,12 @@ COPY publico/ ./publico/
 # Variáveis de ambiente
 ENV NODE_ENV=producao
 ENV HOST=0.0.0.0
+# Silencia o ExperimentalWarning do node:sqlite (cosmetico, nao quebra nada)
+ENV NODE_NO_WARNINGS=1
 # PORT é injetado pelo Railway (NÃO defina aqui)
 
 # Expõe porta
 EXPOSE 3000
 
 # Inicia o servidor
-CMD ["node", "--env-file-if-exists=.env", "src/server.js"]
+CMD ["node", "--no-warnings", "--env-file-if-exists=.env", "src/server.js"]
