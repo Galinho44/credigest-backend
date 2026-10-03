@@ -16,4 +16,5 @@ cmd = "node --no-warnings --env-file-if-exists=.env src/server.js"
 [variables]
 NODE_ENV = "producao"
 HOST = "0.0.0.0"
+NODE_NO_WARNINGS = "1"
 # PORT é injetado automaticamente pelo Railway
