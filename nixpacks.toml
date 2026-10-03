@@ -11,7 +11,7 @@ cmds = ["npm ci --omit=dev"]
 # Sem build step - o projeto roda direto com Node
 
 [start]
-cmd = "npm start"
+cmd = "node --no-warnings --env-file-if-exists=.env src/server.js"
 
 [variables]
 NODE_ENV = "producao"
