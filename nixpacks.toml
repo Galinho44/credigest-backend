@@ -15,4 +15,5 @@ cmd = "npm start"
 
 [variables]
 NODE_ENV = "producao"
+HOST = "0.0.0.0"
 # PORT é injetado automaticamente pelo Railway
