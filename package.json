@@ -14,9 +14,7 @@
     "inspect": "node --no-warnings --env-file-if-exists=.env teste/inspecionar-banco.js",
     "test": "node --test --test-timeout=30000"
   },
-  "dependencies": {
-    "better-sqlite3": "^11.0.0"
-  },
+  "dependencies": {},
   "devDependencies": {},
   "private": true
 }

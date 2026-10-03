@@ -1,4 +1,4 @@
-import Database from 'better-sqlite3';
+import { DatabaseSync } from 'node:sqlite';
 import { mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 
@@ -8,8 +8,14 @@ import { logger } from '../logger.js';
 /**
  * Conexao com o banco.
  *
- * Usa better-sqlite3 (estavel, sem warning experimental).
- * Compila nativo no Linux (Railway) sem problemas.
+ * Usa o modulo `node:sqlite`, que vem pronto no Node 22.5+. Isso evita
+ * dependencia nativa (type `better-sqlite3` precisaria compilar no
+ * Windows e ja falhou varias vezes em maquina do Gabriel).
+ *
+ * O `ExperimentalWarning` que esse modulo emite e' silenciado por
+ * `NODE_NO_WARNINGS=1` (ver nixpacks.toml) e pela flag `--no-warnings`
+ * nos scripts do package.json. O aviso e' cosmetico: nao afeta o
+ * comportamento, so polui o log.
  */
 
 let instancia = null;
@@ -38,18 +44,18 @@ export function conectar(caminho = caminhoBancoAbsoluto()) {
     mkdirSync(dirname(caminho), { recursive: true });
   }
 
-  const db = new Database(caminho);
+  const db = new DatabaseSync(caminho);
 
   // WAL: leituras nao travam escrita. Importante porque o painel fica
   // consultando enquanto o webhook escreve.
-  if (caminho !== ':memory:') db.pragma('journal_mode = WAL');
+  if (caminho !== ':memory:') db.exec('PRAGMA journal_mode = WAL;');
 
   // Sem isto o SQLite ACEITA criar cobranca apontando para um cliente
   // inexistente. Chave estrangeira sem enforce e' decoracao.
-  db.pragma('foreign_keys = ON');
+  db.exec('PRAGMA foreign_keys = ON;');
 
   // Espera ate 5s por lock em vez de falhar na hora.
-  db.pragma('busy_timeout = 5000');
+  db.exec('PRAGMA busy_timeout = 5000;');
 
   instancia = {
     caminho,

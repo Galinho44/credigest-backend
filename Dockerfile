@@ -1,8 +1,8 @@
 # Dockerfile para deploy no Railway
 FROM node:22-alpine
 
-# better-sqlite3 precisa de ferramentas de build para compilar
-RUN apk add --no-cache python3 make g++
+# SQLite nativo (node:sqlite) precisa disso
+RUN apk add --no-cache sqlite-libs
 
 # Cria pasta do banco (volume persistente do Railway)
 RUN mkdir -p /data
