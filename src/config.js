@@ -1,5 +1,6 @@
 import { resolve } from 'node:path';
 import { ErroDeValidacao } from './utilitarios/erros.js';
+import { logger } from './logger.js';
 
 /**
  * Configuracao central. Le do ambiente (arquivo .env carregado pelo
@@ -49,6 +50,13 @@ export const config = {
 
   webhook: {
     token: texto('ASAAS_WEBHOOK_TOKEN', null),
+  },
+
+  auth: {
+    usuario: texto('AUTH_USUARIO', null),
+    senha: texto('AUTH_SENHA', null),
+    sessaoNome: texto('AUTH_SESSAO_NOME', 'credigest_sessao'),
+    sessaoMaxAge: inteiro('AUTH_SESSAO_MAX_AGE', 60 * 60 * 24 * 30), // 30 dias
   },
 };
 
@@ -103,6 +111,11 @@ export function validarConfig() {
     erro.status = 500;
     erro.codigo = 'CONFIG_INVALIDA';
     throw erro;
+  }
+
+  // Auth: se não configurar, avisa mas não bloqueia (permite testar local sem auth)
+  if (!config.auth.usuario || !config.auth.senha) {
+    logger.warn('AUTH_USUARIO e/ou AUTH_SENHA não definidos — painel e API abertos sem autenticação');
   }
 }
 

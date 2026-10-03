@@ -6,12 +6,14 @@ import { config } from './config.js';
 import { logger } from './logger.js';
 import { criarRoteador } from './http/roteador.js';
 import { lerJson, centralDeErros, responderJson } from './http/middlewares/index.js';
+import { autenticacao } from './http/rotas/auth.js';
 import { ErroNaoEncontrado } from './utilitarios/erros.js';
 
 import * as rotasClientes from './http/rotas/clientes.js';
 import * as rotasDividas from './http/rotas/dividas.js';
 import * as rotasCobrancas from './http/rotas/cobrancas.js';
 import * as rotasWebhooks from './http/rotas/webhooks.js';
+import * as rotasAuth from './http/rotas/auth.js';
 
 /**
  * Monta o servidor HTTP (sem subir). Devolve o objeto do server para que
@@ -68,6 +70,7 @@ export function criarAplicacao() {
   rotasDividas.registrar(rota);
   rotasCobrancas.registrar(rota);
   rotasWebhooks.registrar(rota);
+  rotasAuth.registrar(rota);
 
   const lerCorpoJson = lerJson();
 
@@ -122,6 +125,9 @@ export function criarAplicacao() {
         return;
       }
 
+      // ---- autenticação (API + painel) ----
+      await autenticacao(req, res, () => {});
+
       // ---- API ----
       if (req.caminho.startsWith('/api/')) {
         await lerCorpoJson(req);
@@ -136,7 +142,7 @@ export function criarAplicacao() {
         return;
       }
 
-      // ---- painel estatico ----
+      // ---- painel estatico (também protegido) ----
       await servirEstatico(req, res);
     } catch (erro) {
       centralDeErros(erro, req, res);

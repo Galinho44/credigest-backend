@@ -1,0 +1,18 @@
+# nixpacks.toml - Configuração de build para Railway
+# https://nixpacks.com/docs/configuration
+
+[phases.setup]
+nixPkgs = ["nodejs_22", "sqlite"]
+
+[phases.install]
+cmds = ["npm ci --omit=dev"]
+
+[phases.build]
+# Sem build step - o projeto roda direto com Node
+
+[start]
+cmd = "npm start"
+
+[variables]
+NODE_ENV = "producao"
+# PORT é injetado automaticamente pelo Railway
