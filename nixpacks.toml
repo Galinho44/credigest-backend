@@ -2,7 +2,7 @@
 # https://nixpacks.com/docs/configuration
 
 [phases.setup]
-nixPkgs = ["nodejs_22", "sqlite"]
+nixPkgs = ["nodejs_22", "sqlite", "python3", "gcc", "make"]
 
 [phases.install]
 cmds = ["npm ci --omit=dev"]

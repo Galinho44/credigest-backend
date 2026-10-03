@@ -1,4 +1,4 @@
-import { DatabaseSync } from 'node:sqlite';
+import Database from 'better-sqlite3';
 import { mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 
@@ -8,9 +8,8 @@ import { logger } from '../logger.js';
 /**
  * Conexao com o banco.
  *
- * Usa o modulo `node:sqlite`, que vem pronto no Node 22.5+. Isso evita
- * dependencia nativa (type `better-sqlite3` precisaria compilar no
- * Windows e ja falhou varias vezes em maquina do Gabriel).
+ * Usa better-sqlite3 (estavel, sem warning experimental).
+ * Compila nativo no Linux (Railway) sem problemas.
  */
 
 let instancia = null;
@@ -39,18 +38,18 @@ export function conectar(caminho = caminhoBancoAbsoluto()) {
     mkdirSync(dirname(caminho), { recursive: true });
   }
 
-  const db = new DatabaseSync(caminho);
+  const db = new Database(caminho);
 
   // WAL: leituras nao travam escrita. Importante porque o painel fica
   // consultando enquanto o webhook escreve.
-  if (caminho !== ':memory:') db.exec('PRAGMA journal_mode = WAL;');
+  if (caminho !== ':memory:') db.pragma('journal_mode = WAL');
 
   // Sem isto o SQLite ACEITA criar cobranca apontando para um cliente
   // inexistente. Chave estrangeira sem enforce e' decoracao.
-  db.exec('PRAGMA foreign_keys = ON;');
+  db.pragma('foreign_keys = ON');
 
   // Espera ate 5s por lock em vez de falhar na hora.
-  db.exec('PRAGMA busy_timeout = 5000;');
+  db.pragma('busy_timeout = 5000');
 
   instancia = {
     caminho,
