@@ -14,6 +14,7 @@ import * as rotasDividas from './http/rotas/dividas.js';
 import * as rotasCobrancas from './http/rotas/cobrancas.js';
 import * as rotasWebhooks from './http/rotas/webhooks.js';
 import * as rotasAuth from './http/rotas/auth.js';
+import * as rotasMinhaConta from './http/rotas/minhaConta.js';
 
 /**
  * Monta o servidor HTTP (sem subir). Devolve o objeto do server para que
@@ -71,6 +72,7 @@ export function criarAplicacao() {
   rotasCobrancas.registrar(rota);
   rotasWebhooks.registrar(rota);
   rotasAuth.registrar(rota);
+  rotasMinhaConta.registrar(rota);
 
   const lerCorpoJson = lerJson();
 
